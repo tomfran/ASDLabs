@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int minCover(vector<vector<int>> t, int n, int pSig, vector<vector<int>>& DP);
+int minCover(vector<vector<int>>& t, int n, int pSig, vector<vector<int>>& DP);
 
 int main(){
   ifstream in("input.txt");
@@ -19,13 +19,13 @@ int main(){
       tree[parent].push_back(child);
   }
 
-  vector<vector<int>> DP(2,vector<int>(n,-1));
+  vector<vector<int>> DP(n,vector<int>(2,-1));
   out << minCover(tree,0,true,DP);
   return 0;
 }
 
-int minCover(vector<vector<int>> t, int n, int pSig, vector<vector<int>>& DP){
-  if(DP[pSig][n] == -1){
+int minCover(vector<vector<int>>& t, int n, int pSig, vector<vector<int>>& DP){
+  if(DP[n][pSig] == -1){
     int sig = 1;
     if(pSig){
       int unSig = 0;
@@ -33,12 +33,12 @@ int minCover(vector<vector<int>> t, int n, int pSig, vector<vector<int>>& DP){
         sig += minCover(t,t[n][i],true,DP);
         unSig += minCover(t,t[n][i],false,DP);
       }
-      DP[pSig][n] = min(sig,unSig);
+      DP[n][pSig] = min(sig,unSig);
     }else{
       for (int i = 0; i < t[n].size(); i++)
         sig += minCover(t,t[n][i],true,DP);
-      DP[pSig][n] = sig;
+      DP[n][pSig] = sig;
     }
   }
-  return DP[pSig][n];
+  return DP[n][pSig];
 }
