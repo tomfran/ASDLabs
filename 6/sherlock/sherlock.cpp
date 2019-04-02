@@ -11,6 +11,7 @@ int scherlockAux(vector<int>& s, int k, int i,vector<vector<int>>& DPAUX);
 int main(){
   ifstream in("input.txt");
   ofstream out("output.txt");
+  
   int n,m,t;
   in >> n >> m >> t;
   vector<vector<int>> nights(n);
@@ -19,32 +20,14 @@ int main(){
     in >> tmp;
     nights[i] = parser(tmp);
   }
+
   vector<vector<int>> DP(t+1,vector<int> (n,-1));
   vector<vector<int>> DPAUX(t+1,vector<int> (n,-1));
-
-  for (int i = 0; i < DP[0].size(); i++) {
+  for (int i = 0; i < DP[0].size(); i++)
     DP[0][i] = DPAUX[0][i] = 0;
-  }
+
   out << sherlock(DP,DPAUX,nights,t,0);
-
   return 0;
-}
-
-vector<int> parser(string a){
-  vector<int> v(1,0);
-  char prev = a[0];
-  int pos = 0;
-  for (int i = 0; i < a.size(); i++) {
-    if(a[i] == prev){
-      v[pos]++;
-    }
-    else{
-      v.push_back(1);
-      pos++;
-      prev = a[i];
-    }
-  }
-  return v;
 }
 
 int sherlock(vector<vector<int>>& DP, vector<vector<int>>& DPAUX, vector<vector<int>>& nights, int k, int i){
@@ -52,8 +35,10 @@ int sherlock(vector<vector<int>>& DP, vector<vector<int>>& DPAUX, vector<vector<
     return 0;
   if(DP[k][i]==-1){
     int s = 0;
-    for (int r = 0; r <= k; r++)
-      s = max(s,scherlockAux(nights[i],k-r,i,DPAUX)+sherlock(DP,DPAUX,nights,r,i+1));
+    for (int r = 0; r <= k; r++){
+      if((k-r)<=nights[i].size())
+        s = max(s,scherlockAux(nights[i],k-r,i,DPAUX)+sherlock(DP,DPAUX,nights,r,i+1));
+    }
     DP[k][i] = s;
   }
   return DP[k][i];
@@ -85,4 +70,21 @@ int scherlockAux(vector<int>& s, int k, int i,vector<vector<int>>& DPAUX){
       DPAUX[k][i] = max(DP[0][s.size()-1],DP[0][s.size()-2]);
   }
   return DPAUX[k][i];
+}
+
+vector<int> parser(string a){
+  vector<int> v(1,0);
+  char prev = a[0];
+  int pos = 0;
+  for (int i = 0; i < a.size(); i++) {
+    if(a[i] == prev){
+      v[pos]++;
+    }
+    else{
+      v.push_back(1);
+      pos++;
+      prev = a[i];
+    }
+  }
+  return v;
 }
