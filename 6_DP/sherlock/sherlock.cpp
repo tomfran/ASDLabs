@@ -11,7 +11,7 @@ int scherlockAux(vector<int>& s, int k, int i,vector<vector<int>>& DPAUX);
 int main(){
   ifstream in("input.txt");
   ofstream out("output.txt");
-  
+
   int n,m,t;
   in >> n >> m >> t;
   vector<vector<int>> nights(n);
@@ -27,6 +27,7 @@ int main(){
     DP[0][i] = DPAUX[0][i] = 0;
 
   out << sherlock(DP,DPAUX,nights,t,0);
+
   return 0;
 }
 
@@ -35,10 +36,9 @@ int sherlock(vector<vector<int>>& DP, vector<vector<int>>& DPAUX, vector<vector<
     return 0;
   if(DP[k][i]==-1){
     int s = 0;
-    for (int r = 0; r <= k; r++){
+    for (int r = 0; r <= k; r++)
       if((k-r)<=nights[i].size())
         s = max(s,scherlockAux(nights[i],k-r,i,DPAUX)+sherlock(DP,DPAUX,nights,r,i+1));
-    }
     DP[k][i] = s;
   }
   return DP[k][i];
@@ -48,15 +48,12 @@ int scherlockAux(vector<int>& s, int k, int i,vector<vector<int>>& DPAUX){
   if (DPAUX[k][i]==-1){
     //s[0] perchè il primo può solo scegliere se stesso
     vector<vector<int>> DP(2,vector<int> (s.size(),s[0]));
-
     //k = 0 somma alternata
     for (int i = 0; i < 2 && i<DP[0].size(); i++)
       DP[0][i] = s[i];
     for (int i = 2; i < DP[0].size(); i++)
       DP[0][i] = s[i] + DP[0][i-2];
-
-    //la condizione max sul secondo restituirà sempre quel caso,
-    //per gli altri calcolo quello che mi conviene
+    //la condizione max sul secondo restituirà sempre quel caso, per gli altri calcolo quello che mi conviene
     for (int t = 1; t < k; t++) {
       DP[1][1] = DP[0][0]+s[1];
       for (int i = 2; i < DP[0].size(); i++)
