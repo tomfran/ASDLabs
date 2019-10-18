@@ -23,20 +23,20 @@ int main(){
 }
 
 int minCover(vector<vector<int>>& t, int n, int pSig, vector<vector<int>>& DP){
-  if(DP[n][pSig] == -1){
-    int sig = 1;
-    if(pSig){
-      int unSig = 0;
-      for (int i = 0; i < t[n].size(); i++){
-        sig += minCover(t,t[n][i],true,DP);
-        unSig += minCover(t,t[n][i],false,DP);
-      }
-      DP[n][pSig] = min(sig,unSig);
-    }else{
-      for (int i = 0; i < t[n].size(); i++)
-        sig += minCover(t,t[n][i],true,DP);
-      DP[n][pSig] = sig;
+    if(DP[n][pSig] == -1){
+        int sig = 1;
+        if(pSig){
+            int unSig = 0;
+            for (int i = 0; i < t[n].size(); i++){
+                sig += minCover(t,t[n][i],true,DP);
+                unSig += minCover(t,t[n][i],false,DP);
+            }
+            DP[n][pSig] = min(sig,unSig);
+        }else{
+            for (int i = 0; i < t[n].size(); i++)
+                sig += minCover(t,t[n][i],true,DP);
+            DP[n][pSig] = sig;
+        }
     }
-  }
-  return DP[n][pSig];
+    return DP[n][pSig];
 }
